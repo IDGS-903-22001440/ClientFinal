@@ -1,0 +1,52 @@
+<form [formGroup]="saleForm" (ngSubmit)="submitForm()" 
+      class="max-w-2xl mx-auto p-6 bg-gray-900 text-green-400 shadow-lg rounded-lg space-y-6">
+
+  <!-- Usuario -->
+  <div>
+    <label class="block font-semibold mb-2">Nombre Completo:</label>
+    <input formControlName="fullName" type="text" readonly
+           class="w-full border border-green-500 bg-gray-800 p-2 rounded text-green-300" />
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-2">Correo Electrónico:</label>
+    <input formControlName="email" type="email" readonly
+           class="w-full border border-green-500 bg-gray-800 p-2 rounded text-green-300" />
+  </div>
+
+  <input formControlName="userId" type="hidden" />
+
+  <!-- Dirección -->
+  <div>
+    <label class="block font-semibold mb-2">Dirección de envío:</label>
+    <input formControlName="direccion" type="text" placeholder="Ej: Calle 123, Ciudad, País"
+           class="w-full border border-green-500 bg-gray-800 p-2 rounded text-green-300" />
+  </div>
+
+  <!-- Módulos -->
+  <div>
+    <label class="block font-semibold mb-2">Selecciona los módulos a comprar:</label>
+    <div *ngFor="let module of sensorModules" class="mb-4 p-3 bg-gray-800 rounded-lg">
+      <label class="flex items-center space-x-2">
+        <input type="checkbox" [checked]="module.selected" 
+               (change)="onModuleCheckboxChange(module, $event)" />
+        <span>{{ module.name }}</span>
+      </label>
+
+      <div *ngIf="module.selected && module.formGroup" [formGroup]="module.formGroup" class="ml-6 mt-2">
+        <label class="block">Cantidad para {{ module.product.nombre }}:</label>
+        <input type="number" formControlName="quantity" min="1" 
+               class="border border-green-500 bg-gray-700 p-1 rounded w-24 text-green-300" />
+        <span class="text-green-500 ml-2">Precio: {{ module.product.precio | currency }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón -->
+  <div class="text-center">
+    <button type="submit" 
+            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
+      Crear Cotización
+    </button>
+  </div>
+</form>

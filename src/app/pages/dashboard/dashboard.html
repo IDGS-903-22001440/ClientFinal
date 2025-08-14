@@ -1,0 +1,133 @@
+<!-- Header -->
+    <header class="bg-green-600">
+      <h1 class="text-3xl text-black font-bold py-2 px-4">Dashboard</h1>
+      <p class="text-sm text-black py-2 px-4">Resumen mensual de ventas, productos y compras.</p>
+    </header>
+<div class="min-h-screen bg-black text-green-200 p-6">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Loading / Error -->
+    <div *ngIf="loading" class="p-6 bg-green-900/20 rounded-lg text-green-300">
+      Cargando datos del dashboard...
+    </div>
+
+    <div *ngIf="!loading && errorMessage" class="p-4 bg-red-900 text-red-300 rounded mb-4">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!loading && !errorMessage" class="space-y-6">
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-4 bg-black border border-green-700 rounded-lg shadow">
+          <p class="text-sm text-green-300">Ventas este mes</p>
+          <p class="text-2xl font-bold text-white">{{ totalSales }}</p>
+          <p class="text-sm text-green-400 mt-2">Ingresos: <span class="font-semibold text-green-300">{{ totalRevenue | currency }}</span></p>
+        </div>
+
+        <div class="p-4 bg-black border border-green-700 rounded-lg shadow">
+          <p class="text-sm text-green-300">Productos</p>
+          <p class="text-2xl font-bold text-white">{{ totalProductos }}</p>
+          <p class="text-sm text-green-400 mt-2">Bajo stock: <span class="font-semibold text-yellow-300">{{ productosBajoStock.length }}</span></p>
+        </div>
+
+        <div class="p-4 bg-black border border-green-700 rounded-lg shadow">
+          <p class="text-sm text-green-300">Compras</p>
+          <p class="text-2xl font-bold text-white">{{ totalCompras }}</p>
+          <p class="text-sm text-green-400 mt-2">Invertido: <span class="font-semibold text-green-300">{{ totalInvertido | currency }}</span></p>
+        </div>
+      </div>
+
+      <!-- Two-column area -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Left: Ventas por día + Top productos -->
+        <div class="space-y-4">
+          <div class="bg-black border border-green-700 p-4 rounded-lg">
+            <h3 class="text-lg text-green-300 font-semibold mb-2">Ventas por día</h3>
+            <div *ngIf="dailySales && dailySales.length; else noDaily">
+              <ul class="space-y-2 text-sm text-green-200">
+                <li *ngFor="let d of dailySales">
+                  <span class="font-medium text-white">{{ d.Date ?? d.date }}</span>
+                  <span class="ml-2 text-green-400">{{ (d.Total ?? d.total) | currency }}</span>
+                </li>
+              </ul>
+            </div>
+            <ng-template #noDaily>
+              <p class="text-sm text-green-400/70">No hay datos diarios.</p>
+            </ng-template>
+          </div>
+
+          <div class="bg-black border border-green-700 p-4 rounded-lg">
+            <h3 class="text-lg text-green-300 font-semibold mb-2">Top productos (cantidad)</h3>
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-green-400/80">
+                  <th class="pb-2">Producto</th>
+                  <th class="pb-2">Cantidad</th>
+                  <th class="pb-2">Ingresos</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let p of topProducts" class="border-t border-green-800">
+                    <td class="pt-2">{{ p.product }}</td>
+                    <td class="pt-2">{{ p.quantitySold }}</td>
+                    <td class="pt-2">{{ p.revenue | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Productos / Compras resumen -->
+        <div class="space-y-4">
+          <div class="bg-black border border-green-700 p-4 rounded-lg">
+            <h3 class="text-lg text-green-300 font-semibold mb-2">Productos bajo stock</h3>
+            <ul class="text-sm text-green-200 space-y-2">
+              <li *ngFor="let p of productosBajoStock">
+                <span class="font-medium text-white">{{ p.Nombre ?? p.nombre ?? p.Name }}</span>
+                <span class="ml-2 text-yellow-300">stock: {{ p.Stock ?? p.stock }}</span>
+              </li>
+            </ul>
+            <div *ngIf="!productosBajoStock.length" class="text-sm text-green-400/70">No hay productos con bajo stock.</div>
+          </div>
+
+          <div class="bg-black border border-green-700 p-4 rounded-lg">
+            <h3 class="text-lg text-green-300 font-semibold mb-2">Proveedores frecuentes</h3>
+            <ul class="text-sm text-green-200 space-y-2">
+              <li *ngFor="let prov of proveedoresFrecuentes">
+                <span class="font-medium text-white">{{ prov.Proveedor ?? prov.proveedor ?? prov.Nombre }}</span>
+                <span class="ml-2 text-green-400">Compras: {{ prov.ComprasRealizadas ?? prov.compras ?? prov.count }}</span>
+                <span class="ml-2 text-green-300">{{ (prov.TotalInvertido ?? prov.total ?? prov.amount) | currency }}</span>
+              </li>
+            </ul>
+            <div *ngIf="!proveedoresFrecuentes.length" class="text-sm text-green-400/70">No hay proveedores registrados.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom: tablas expandibles -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-black border border-green-700 p-4 rounded-lg">
+          <h3 class="text-lg text-green-300 font-semibold mb-3">Productos más caros</h3>
+          <ul class="text-sm text-green-200 space-y-2">
+            <li *ngFor="let p of productosMasCaros">
+              <span class="font-medium text-white">{{ p.Nombre ?? p.nombre ?? p.Name }}</span>
+              <span class="ml-2 text-green-300">{{ (p.Precio ?? p.precio ?? p.price) | currency }}</span>
+              <span class="ml-2 text-green-400">({{ p.Categoria ?? p.categoria ?? p.category }})</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-black border border-green-700 p-4 rounded-lg">
+          <h3 class="text-lg text-green-300 font-semibold mb-3">Productos más comprados (compras)</h3>
+          <ul class="text-sm text-green-200 space-y-2">
+            <li *ngFor="let p of productosMasComprados">
+              <span class="font-medium text-white">{{ p.Producto ?? p.producto ?? p.Product }}</span>
+              <span class="ml-2 text-green-400">Cant: {{ p.CantidadTotal ?? p.cantidadTotal ?? p.Quantity }}</span>
+              <span class="ml-2 text-green-300">{{ (p.MontoTotal ?? p.montoTotal ?? p.Total) | currency }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

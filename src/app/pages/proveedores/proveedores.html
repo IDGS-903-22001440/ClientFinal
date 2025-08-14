@@ -1,0 +1,63 @@
+<div class="mx-60 py-8 min-h-screen flex flex-col">
+  <h1 class="text-3xl font-bold text-black mb-4">Proveedores Registrados</h1>
+
+  <div class="overflow-x-auto rounded-md shadow-md">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-700 text-white">
+          <th class="px-4 py-2 border border-gray-600 text-left">Nombre</th>
+          <th class="px-4 py-2 border border-gray-600 text-left">Email</th>
+          <th class="px-4 py-2 border border-gray-600 text-left">Teléfono</th>
+          <th class="px-4 py-2 border border-gray-600 text-left">Categoría</th>
+          <th class="px-4 py-2 border border-gray-600 text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+       <tr *ngFor="let proveedor of proveedores; trackBy: trackById" class="bg-gray-800 text-white hover:bg-gray-600 transition">
+          <td class="px-4 py-2 border border-gray-700">{{ proveedor.nombre }}</td>
+          <td class="px-4 py-2 border border-gray-700">{{ proveedor.email || '-' }}</td>
+          <td class="px-4 py-2 border border-gray-700">{{ proveedor.telefono || '-' }}</td>
+          <td class="px-4 py-2 border border-gray-700">{{ getNombreCategoria(proveedor.categoriaId) }}</td>
+          <td class="px-4 py-2 border border-gray-700 text-center">
+            <button
+              class="text-blue-400 hover:text-blue-300 mr-2"
+              (click)="openEdit(proveedor)"
+              title="Editar"
+              type="button"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              class="text-red-500 hover:text-red-400"
+              (click)="deleteProveedor(proveedor.id)"
+              title="Eliminar"
+              type="button"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botón para agregar proveedor -->
+  <div class="mt-6 self-end">
+    <button
+      class="bg-green-500 hover:bg-green-600 text-white font-medium px-5 py-2 rounded-md shadow"
+      (click)="openCreateProveedor()"
+      type="button"
+    >
+      Agregar Proveedor
+    </button>
+  </div>
+
+  <!-- Modal de proveedor (creación/edición) -->
+  <app-proveedor-modal
+    *ngIf="selectedProveedor"
+    [proveedor]="selectedProveedor"
+    [categorias]="categorias"
+    (onClose)="closeProveedorModal()"
+    (onSave)="saveProveedor($event)"
+  ></app-proveedor-modal>
+</div>

@@ -1,0 +1,34 @@
+.historial-container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.modo-btn {
+  background: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+}
+
+.lista li {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.lista li:hover {
+  background: #f1f1f1;
+}
+
+.detalle {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}

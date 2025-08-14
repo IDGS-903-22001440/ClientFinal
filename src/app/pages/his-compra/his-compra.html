@@ -1,0 +1,97 @@
+<div class="p-6 min-h-screen text-green-400">
+  <h2 class="text-2xl font-bold mb-6 text-white">
+    Historial de Ventas a Clientes
+  </h2>
+
+  <div class="flex gap-6">
+    <!-- Tabla de ventas -->
+    <div
+      class="overflow-x-auto"
+      [ngClass]="detalleSeleccionado ? 'w-1/2' : 'w-full'"
+    >
+      <table class="min-w-full border border-green-700 shadow-lg bg-black border-collapse">
+        <thead>
+          <tr class="bg-gray-700 text-white">
+            <!-- Eliminada columna # -->
+            <th class="py-3 px-4 border-b border-green-700 text-left">Cliente</th>
+            <th class="py-3 px-4 border-b border-green-700 text-left">Fecha</th>
+            <th class="py-3 px-4 border-b border-green-700 text-left">Total</th>
+            <th class="py-3 px-4 border-b border-green-700 text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let venta of ventas; let i = index"
+            class="bg-gray-800 text-white hover:bg-gray-600 cursor-pointer transition"
+          >
+            <!-- Eliminada celda de índice -->
+            <td class="py-2 px-4 border-b border-green-700">
+              {{ venta.user?.fullName }}
+            </td>
+            <td class="py-2 px-4 border-b border-green-700">
+              {{ venta.date | date: 'short' }}
+            </td>
+            <td class="py-2 px-4 border-b border-green-700">
+              {{ venta.total | currency }}
+            </td>
+            <td class="py-2 px-4 border-b border-green-700 text-center">
+              <button
+                (click)="verDetalle(venta.id); $event.stopPropagation()"
+                class="bg-green-600 hover:bg-green-700 text-black px-3 py-1 rounded-md"
+              >
+                Ver Detalle
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Panel de detalle -->
+    <div
+        *ngIf="detalleSeleccionado"
+        class="bg-black border border-green-700 rounded-lg p-6 shadow-lg w-1/2 max-h-[600px] overflow-y-auto"
+        >
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-bold text-green-400">Detalle de la Venta</h3>
+            <button
+            (click)="cerrarDetalle()"
+            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md"
+            title="Cerrar detalle"
+            >
+            ✕
+            </button>
+        </div>
+
+        <div *ngFor="let item of detalleSeleccionado.saleDetails; let i = index" class="mb-6 border-b border-gray-700 pb-4">
+            <div class="flex justify-between items-center">
+            <div class="flex gap-4 items-start">
+                <img
+                [src]="item.producto?.imagen"
+                alt="{{ item.producto?.nombre }}"
+                class="h-20 w-20 object-contain bg-white rounded"
+                />
+                <div>
+                <h2 class="text-lg font-semibold text-green-400">{{ item.producto?.nombre }}</h2>
+                <p class="text-sm text-gray-400">Precio: {{ item.unitPrice | currency }}</p>
+
+                <p class="text-sm text-gray-400">Cantidad: {{ item.quantity }}</p>
+                </div>
+            </div>
+
+            <div class="text-2xl font-bold text-green-400">
+                {{ (item.unitPrice! * item.quantity!) | number:'1.2-2' | currency }}
+            </div>
+            </div>
+        </div>
+
+        <div class="mt-6 text-lg font-bold text-green-400">
+            Total: {{ detalleSeleccionado.total | currency }}
+        </div>
+        </div>
+  </div>
+
+  <ng-template #noSeleccion>
+    <p class="text-green-300 italic">Selecciona una venta para ver el detalle.</p>
+  </ng-template>
+</div>

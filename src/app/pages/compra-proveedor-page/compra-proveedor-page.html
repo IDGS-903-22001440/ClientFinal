@@ -1,0 +1,88 @@
+<div class="bg-green-800 min-h-screen p-6 text-white">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    <!-- Panel Izquierdo: Selección y Formulario -->
+    <div class="bg-gray-900 p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold text-green-400 mb-4">Registrar Compra a Proveedor</h2>
+
+      <!-- Proveedor -->
+      <label class="block text-green-400 mb-2">Proveedor:</label>
+            <select (change)="onProveedorSeleccionado($event)" class="w-full p-2 rounded border border-green-500 bg-black text-white mb-4">
+        <option value="">Seleccione un proveedor</option>
+        <option *ngFor="let p of proveedores" [value]="p.id">
+            {{ p.nombre }}
+        </option>
+        </select>
+
+      <!-- Formulario de producto -->
+      <div *ngIf="proveedorSeleccionado">
+        <h3 class="text-lg text-green-300 mb-4">
+          Agregar producto (Categoría: {{ categoriaProveedor }})
+        </h3>
+
+        <!-- Producto -->
+        <label class="block text-green-400 mb-1">Producto:</label>
+        <select [(ngModel)]="formProducto.productoId"
+          class="w-full p-2 rounded border border-green-500 bg-black text-white mb-4">
+          <option value="0">-- Selecciona un producto --</option>
+          <option *ngFor="let prod of productosFiltrados" [value]="prod.id">{{ prod.nombre }}</option>
+        </select>
+
+        <!-- Cantidad -->
+        <label class="block text-green-400 mb-1">Cantidad:</label>
+        <input type="number" [(ngModel)]="formProducto.cantidad"
+          class="w-full p-2 rounded border border-green-500 bg-black text-white mb-4" />
+
+        <!-- Precio Unitario -->
+        <label class="block text-green-400 mb-1">Precio Unitario:</label>
+        <input type="number" [(ngModel)]="formProducto.precioUnitarioCompra" step="0.01"
+          class="w-full p-2 rounded border border-green-500 bg-black text-white mb-4" />
+
+        <!-- Botones -->
+        <div class="flex gap-4">
+          <button (click)="agregarOActualizarProducto()"
+            class="flex-1 bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-green-500 transition">
+            {{ editandoIndex !== null ? 'Actualizar' : 'Agregar' }}
+          </button>
+          <button *ngIf="editandoIndex !== null" (click)="cancelarEdicion()"
+            class="flex-1 bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-red-500 transition">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Derecho: Carrito -->
+    <div class="bg-gray-900 p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold text-green-400 mb-4">Productos en la Compra</h2>
+
+      <div *ngIf="compra.detalles.length === 0" class="text-gray-400">
+        No hay productos agregados.
+      </div>
+
+      <div *ngFor="let item of compra.detalles; let i = index" class="mb-4 border-b border-gray-700 pb-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-lg font-semibold">{{ obtenerNombreProducto(item.productoId) }}</h3>
+            <p class="text-sm text-gray-400">Cantidad: {{ item.cantidad }}</p>
+            <p class="text-sm text-gray-400">Precio: ${{ item.precioUnitarioCompra }}</p>
+            <p class="text-sm text-gray-500">Subtotal: ${{ (item.cantidad * item.precioUnitarioCompra) | number:'1.2-2' }}</p>
+          </div>
+          <div class="flex gap-2">
+            <button (click)="editarProducto(i)" class="text-green-400 hover:underline">Editar</button>
+            <button (click)="eliminarProducto(i)" class="text-red-400 hover:underline">Eliminar</button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="compra.detalles.length > 0" class="mt-4 font-bold text-green-300">
+        Total: ${{ calcularTotal() | number:'1.2-2' }}
+      </div>
+
+      <button *ngIf="compra.detalles.length > 0" (click)="registrarCompra()"
+        class="mt-4 w-full bg-green-800 text-green-200 font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition">
+        Registrar Compra
+      </button>
+    </div>
+  </div>
+</div>

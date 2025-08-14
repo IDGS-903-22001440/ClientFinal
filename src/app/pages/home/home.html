@@ -1,22 +1,236 @@
-<div class="flex items-center flex-col pt-56 h-screen">
-    <div class="h-screen">
-        <h1 class="text-4xl text-center font-bold my-10">Welcome to
-            <span class="text-5xl text-green-800">MyApp</span>
-        </h1>
+<!-- Sección arriba del carrusel con más padding vertical -->
+<ng-container *ngIf="authService.getUserDetail()?.roles.includes('Admin'); else checkLogin">
+</ng-container> 
+<ng-template #checkLogin>
+<section class="w-full bg-green-800 text-white flex flex-col md:flex-row items-center justify-between px-6 pb-12 my-12">
+    <div class="md:w-2/3 space-y-6 my-12">
+      <h2 class="text-3xl font-bold text-yellow-300 drop-shadow-lg">
+        La mejor aplicación para administrar áreas verdes: <span class="text-green-400 bg-black">Observer</span>
+      </h2>
+      
+      <p class="max-w-xl text-lg font-medium text-gray-100">
+        Observer es una app diseñada especialmente para dispositivos Android que te ayuda a gestionar y cuidar áreas verdes de forma fácil y eficiente. Con Observer podrás:
+      </p>
 
-        <div class="flex flex-col items-center gap-5 justify-center">
-            @if(authService.getUserDetail()){
-                <h1 class="text-2xl">
-                    You are logged in as <span class="font-bold bg-blue-600 rounded-md p-2 text-white">
-                        {{authService.getUserDetail()?.fullName}}
-                    </span>
-                </h1>
-            }@else{<h1 class="text-3xl">You are not logged in</h1>
-            <a routerLink="/login">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
-                    Login
-                </button>
-            </a>}
-        </div>
+      <ul class="list-disc list-inside max-w-xl text-sm text-green-100 space-y-2">
+        <li class="hover:text-yellow-300 transition-colors">Registrar y monitorear el estado de jardines, parques y zonas verdes.</li>
+        <li class="hover:text-yellow-300 transition-colors">Organizar tareas de mantenimiento y programación de riegos o poda.</li>
+        <li class="hover:text-yellow-300 transition-colors">Llevar un control detallado de cada espacio, optimizando recursos y tiempo.</li>
+        <li class="hover:text-yellow-300 transition-colors">Visualizar reportes claros para tomar decisiones informadas.</li>
+      </ul>
+
+      <p class="max-w-xl text-base mt-4 text-gray-100 italic">
+        Si buscas una herramienta práctica, intuitiva y completa para cuidar tus áreas verdes desde tu celular, <span class="text-green-400 bg-black font-semibold">Observer</span> es la solución perfecta para ti.
+      </p>
     </div>
-</div>
+
+    <!-- contenedor: relative + overflow-hidden + altura fija -->
+    <div class="md:w-1/3 mt-6 md:mt-0 relative overflow-hidden h-48 md:h-64">
+      <!-- imagen posicionada absolutamente y controlada vía CSS -->
+      <img
+        id="img-alta"
+        src="assets/images/img7.png"
+        alt="Parque"
+        aria-hidden="false"
+      />
+    </div>
+  </section>
+
+  <!-- Carrusel sin bordes redondeados, ancho completo y sin margenes arriba/abajo -->
+  <div class="relative w-full overflow-hidden bg-black ">
+    <!-- Slides -->
+    <div class="flex transition-transform duration-700 ease-in-out" [ngStyle]="{'transform': 'translateX(-' + currentIndex * 100 + '%)'}">
+      <div
+        class="min-w-full flex justify-center items-center bg-black bg-opacity-50"
+        style="height: 500px;"
+        *ngFor="let imagen of [
+          'assets/images/img1.png',
+          'assets/images/img2.png',
+          'assets/images/img3.png',
+          'assets/images/img4.png',
+          'assets/images/img5.png',
+          'assets/images/img6.png'
+        ]"
+      >
+        <img
+          [src]="imagen"
+          alt="Parque"
+          class="object-contain max-h-full max-w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Controles -->
+    <button
+      (click)="prevSlide()"
+      class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-30 text-white px-4 py-2 rounded-full hover:bg-opacity-60"
+    >
+      ‹
+    </button>
+    <button
+      (click)="nextSlide()"
+      class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-30 text-white px-4 py-2 rounded-full hover:bg-opacity-60"
+    >
+      ›
+    </button>
+  </div>
+
+
+
+
+
+  @if (isLoggedIn()) {
+      <div class="max-w-7xl mx-auto px-4 bg-green-800 min-h-screen flex flex-col pt-6">
+        <h2 class="text-2xl font-bold mt-12 mb-6 text-center text-white">Todos los productos</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-20">
+          <div
+            class="bg-black text-white shadow-md rounded-lg flex flex-col p-5 max-w-sm mx-auto"
+            *ngFor="let producto of productos"
+          >
+            <img
+              [src]="producto.imagen"
+              [alt]="producto.nombre"
+              class="h-48 object-contain mb-4"
+            />
+            <h3 class="text-lg font-semibold mb-2">{{ producto.nombre }}</h3>
+            <p class="line-clamp-3 text-gray-300 mb-4">{{ producto.descripcion }}</p>
+            <p class="font-bold mb-1">Precio: ${{ producto.precio }}</p>
+            <p class="text-gray-400 mb-4">Stock: {{ producto.stock }}</p>
+            <button
+              (click)="irADetalle(producto.id)"
+              class="mt-auto flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 text-white py-2 rounded shadow hover:scale-105 transition-transform duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.3 2.6a1 1 0 00.9 1.4h12.2m-11-4h10m-6 8a1 1 0 100-2 1 1 0 000 2zm-6 0a1 1 0 100-2 1 1 0 000 2z" />
+              </svg>
+              Buy
+            </button>
+          </div>
+        </div>
+      </div>}@else{
+          <div class="mx-auto px-4 bg-green-800 min-h-screen flex flex-col pt-6 pb-12 my-12">
+
+            <!-- Título -->
+            <h2 class="text-2xl font-bold mt-12 mb-6 text-center text-white">NUESTROS PRODUCTOS</h2>
+
+            <!-- Tres productos arriba -->
+            <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
+              <div
+                class="bg-black text-white shadow-md rounded-lg flex flex-col p-5 max-w-sm mx-auto"
+                *ngFor="let producto of productos.slice(0,3)"
+              >
+                <img [src]="producto.imagen" [alt]="producto.nombre" class="h-48 object-contain mb-4" />
+                <h3 class="text-lg font-semibold mb-2">{{ producto.nombre }}</h3>
+                <p class="line-clamp-3 text-gray-300 mb-4">{{ producto.descripcion }}</p>
+                <p class="font-bold mb-1">Precio: ${{ producto.precio }}</p>
+                <p class="text-gray-400 mb-4">Stock: {{ producto.stock }}</p>
+                <button
+                  (click)="irADetalle(producto.id)"
+                  class="mt-auto flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 text-white py-2 rounded shadow hover:scale-105 transition-transform duration-200"
+                >
+                  Buy
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="text-2xl font-bold mt-12 mb-6 text-center text-white">PRODUCTOS DESTACADOS</h2>
+            
+            <!-- Carrusel sin bordes redondeados, ancho completo y sin margenes arriba/abajo -->
+            <div class="relative w-full overflow-hidden bg-black mb-12">
+
+              <!-- Slides -->
+              <div class="flex transition-transform duration-700 ease-in-out" [ngStyle]="{'transform': 'translateX(-' + currentIndex * 100 + '%)'}">
+                <div
+                  class="min-w-full flex justify-center items-center bg-black bg-opacity-50"
+                  style="height: 500px;"
+                  *ngFor="let producto of productos.slice(0, 4)"
+                >
+                  <img
+                    [src]="producto.imagen"
+                    [alt]="producto.nombre"
+                    class="object-contain max-h-full max-w-full"
+                  />
+                </div>
+              </div>
+
+              <!-- Controles -->
+              <button
+                (click)="prevSlide()"
+                class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-30 text-white px-4 py-2 rounded-full hover:bg-opacity-60"
+              >
+                ‹
+              </button>
+              <button
+                (click)="nextSlide()"
+                class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-30 text-white px-4 py-2 rounded-full hover:bg-opacity-60"
+              >
+                ›
+              </button>
+            </div>
+
+            <div class="mx-auto px-4 bg-green-800 min-h-screen flex flex-col pt-25">
+            <!-- Tres productos abajo -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-20">
+              <div
+                class="bg-black text-white shadow-md rounded-lg flex flex-col p-5 max-w-sm mx-auto"
+                *ngFor="let producto of productos.slice(3,6)"
+              >
+                <img [src]="producto.imagen" [alt]="producto.nombre" class="h-48 object-contain mb-4" />
+                <h3 class="text-lg font-semibold mb-2">{{ producto.nombre }}</h3>
+                <p class="line-clamp-3 text-gray-300 mb-4">{{ producto.descripcion }}</p>
+                <p class="font-bold mb-1">Precio: ${{ producto.precio }}</p>
+                <p class="text-gray-400 mb-4">Stock: {{ producto.stock }}</p>
+                <button
+                  (click)="irADetalle(producto.id)"
+                  class="mt-auto flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 text-white py-2 rounded shadow hover:scale-105 transition-transform duration-200"
+                >
+                  Buy
+                </button>
+              </div>
+            </div>
+            
+          </div>
+      }
+
+  <!-- Footer -->
+  <footer class="bg-black text-gray-300 mt-12">
+    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-white font-bold mb-4 text-lg">Contacto</h3>
+        <p><strong>Teléfono:</strong> <a href="tel:+521234567890" class="hover:text-green-400">+52 123 456 7890</a></p>
+        <p><strong>Email:</strong> <a href="mailto:contacto@observerapp.com" class="hover:text-green-400">contacto@observerapp.com</a></p>
+        <p class="mt-2">Dirección: Av. Ejemplo 123, Ciudad, País</p>
+      </div>
+
+      <div>
+        <h3 class="text-white font-bold mb-4 text-lg">Redes Sociales</h3>
+        <div class="flex space-x-6">
+          <a href="#" aria-label="Facebook" class="hover:text-green-400">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M22 12a10 10 0 10-11.6 9.8v-6.9H8v-2.9h2.4V9.8c0-2.4 1.4-3.7 3.5-3.7 1 0 2 .1 2 .1v2.2h-1.1c-1.1 0-1.4.7-1.4 1.4v1.7h2.4l-.4 2.9h-2v6.9A10 10 0 0022 12z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter" class="hover:text-green-400">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.3 4.3 0 001.88-2.37 8.6 8.6 0 01-2.73 1.05 4.29 4.29 0 00-7.3 3.91A12.2 12.2 0 013 5.15a4.29 4.29 0 001.33 5.72 4.23 4.23 0 01-1.95-.54v.06a4.29 4.29 0 003.44 4.2 4.3 4.3 0 01-1.94.07 4.29 4.29 0 004 2.97A8.6 8.6 0 012 19.54a12.1 12.1 0 006.56 1.92c7.87 0 12.18-6.52 12.18-12.18 0-.19 0-.39-.01-.58A8.7 8.7 0 0022.46 6z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="hover:text-green-400">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a1 1 0 110 2 1 1 0 010-2zm-5 2a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-white font-bold mb-4 text-lg">Horario</h3>
+        <p>Lunes a Viernes: 9:00 AM - 6:00 PM</p>
+        <p>Sábados: 10:00 AM - 3:00 PM</p>
+        <p>Domingos: Cerrado</p>
+      </div>
+    </div>
+    <div class="border-t border-gray-700 mt-6 py-4 text-center text-sm text-gray-500">
+      &copy; 2025 Observer App. Todos los derechos reservados.
+    </div>
+  </footer>
+  </ng-template>

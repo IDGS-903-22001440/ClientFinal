@@ -1,0 +1,103 @@
+<div class="p-6 min-h-screen text-green-400">
+  <!-- Botón de cambio de modo -->
+  <div class="flex justify-between items-center mb-6 text-white">
+    <h2 class="text-2xl font-bold">
+      {{ modo === 'compras' ? 'Historial de Compras a Proveedores' : 'Historial de Ventas a Clientes' }}
+    </h2>
+    <button
+      (click)="cambiarModo()"
+      class="bg-green-500 hover:bg-green-800 text-black px-4 py-2 rounded-lg font-semibold transition"
+    >
+      {{ modo === 'compras' ? 'Ver Ventas' : 'Ver Compras' }}
+    </button>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6">
+    <!-- Tabla de historial -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-green-700 shadow-lg bg-black border-collapse">
+        <thead>
+          <tr class="bg-gray-700 text-white">
+            <th class="py-3 px-4 border-b border-green-700 text-left">#</th>
+            <th class="py-3 px-4 border-b border-green-700 text-left">
+              {{ modo === 'compras' ? 'Proveedor' : 'Cliente' }}
+            </th>
+            <th class="py-3 px-4 border-b border-green-700 text-left">Fecha</th>
+            <th class="py-3 px-4 border-b border-green-700 text-left">Total</th>
+            <th class="py-3 px-4 border-b border-green-700 text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of lista; let i = index"
+            class="bg-gray-800 text-white hover:bg-gray-600 transition cursor-pointer"
+          >
+            <td class="py-2 px-4 border-b border-green-700">{{ i + 1 }}</td>
+            <td class="py-2 px-4 border-b border-green-700">
+              {{ item.proveedorNombre || item.user?.userName }}
+            </td>
+            <td class="py-2 px-4 border-b border-green-700">
+              {{ item.fechaCompra || item.date | date: 'short' }}
+            </td>
+            <td class="py-2 px-4 border-b border-green-700">
+              {{ item.total | currency }}
+            </td>
+            <td class="py-2 px-4 border-b border-green-700 text-center">
+              <button
+                (click)="verDetalle(item.id); $event.stopPropagation()"
+                class="bg-green-600 hover:bg-green-700 text-black px-3 py-1 rounded-md"
+              >
+                Ver Detalle
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Panel de detalle -->
+    <div class="bg-black border border-green-700 rounded-lg p-4 shadow-lg max-h-[600px] overflow-y-auto">
+      <h3 class="text-xl font-bold mb-4 text-white">Detalle</h3>
+
+      <div *ngIf="detalleSeleccionado; else noSeleccion">
+        <p class="mb-2">
+          <span class="font-bold">Fecha:</span>
+          {{ detalleSeleccionado.fechaCompra || detalleSeleccionado.date | date: 'fullDate' }}
+        </p>
+        <p class="mb-4">
+          <span class="font-bold">Total:</span>
+          {{ detalleSeleccionado.total | currency }}
+        </p>
+
+        <div *ngFor="let det of detalleItems" class="mb-6 border-b border-gray-700 pb-4">
+          <div class="flex justify-between items-center">
+            <div class="flex gap-4 items-start">
+              <img
+                [src]="det.producto?.imagen"
+                alt="{{ det.producto?.nombre }}"
+                class="h-20 w-20 object-contain bg-white rounded"
+              />
+              <div>
+                <h2 class="text-lg font-semibold text-green-400">{{ det.producto?.nombre }}</h2>
+                <p class="text-sm text-gray-400">
+                  Precio: {{ (det.precioUnitarioCompra || det.unitPrice) | currency }}
+                </p>
+                <p class="text-sm text-gray-400">
+                  Cantidad: {{ det.cantidad || det.quantity }}
+                </p>
+              </div>
+            </div>
+
+            <div class="text-2xl font-bold text-green-400">
+              {{ ((det.precioUnitarioCompra || det.unitPrice) * (det.cantidad || det.quantity)) | number:'1.2-2' | currency }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noSeleccion>
+        <p class="text-green-300 italic">Selecciona una compra o venta para ver el detalle.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

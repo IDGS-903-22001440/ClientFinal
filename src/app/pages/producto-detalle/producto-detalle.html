@@ -1,0 +1,114 @@
+<div class="min-h-screen bg-green-900 text-white p-8">
+  <div class="max-w-4xl mx-auto bg-black rounded-lg shadow-lg p-6">
+   
+    <!-- Botón de regreso -->
+    <button (click)="volver()" class="absolute top-4 left-4 text-white hover:text-green-400">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    <img
+      [src]="producto.imagen"
+      [alt]="producto.nombre"
+      class="h-48 object-contain mb-4"
+    />
+    <h2 class="text-3xl font-bold mb-4">{{ producto?.nombre }}</h2>
+    <p class="text-gray-300 mb-4">{{ producto?.descripcion }}</p>
+    <p class="text-green-400 font-semibold text-lg mb-2">Precio: ${{ producto?.precio }}</p>
+    <p class="text-sm text-gray-400 mb-6">Stock disponible: {{ producto?.stock }}</p>
+
+    <!-- Control de cantidad -->
+    <div class="flex items-center gap-4 mb-6">
+      <button (click)="restarCantidad()" class="bg-green-700 px-3 py-1 rounded hover:bg-green-800 text-white text-xl">-</button>
+      <span class="text-2xl">{{ cantidad }}</span>
+      <button (click)="sumarCantidad()" class="bg-green-700 px-3 py-1 rounded hover:bg-green-800 text-white text-xl">+</button>
+    </div>
+
+    <button
+      (click)="agregarAlCarrito()"
+      class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded text-lg font-semibold"
+    >
+      Agregar al carrito
+    </button>
+
+    <!-- Espacio para dejar un comentario -->
+    <div class="mt-10">
+      <h3 class="text-2xl font-bold text-green-400 mb-2">Deja un comentario</h3>
+      <textarea
+        [(ngModel)]="nuevoComentario"
+        placeholder="Escribe tu opinión sobre este producto..."
+        class="w-full p-3 rounded text-black bg-white mb-2"
+        rows="3"
+      ></textarea>
+      <button
+        (click)="crearComentario()"
+        class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white font-semibold"
+      >
+        Comentar
+      </button>
+    </div>
+
+    <h3 class="mt-10 text-2xl font-bold text-green-400 mb-2">Comentarios</h3>
+
+    <!-- Filtro de orden -->
+    <div class="mb-4">
+      <label for="ordenComentarios" class="mr-2 font-semibold text-green-400">Ordenar por:</label>
+      <select id="ordenComentarios" [(ngModel)]="ordenActual" (change)="cambiarOrden(ordenActual)"
+              class="bg-gray-800 text-white rounded px-2 py-1">
+        <option value="fecha">Fecha</option>
+        <option value="likes">Likes</option>
+        <option value="dislikes">Dislikes</option>
+        <option value="usuario">Usuario</option>
+      </select>
+    </div>
+
+    <!-- Lista de comentarios -->
+    <div *ngFor="let c of comentarios" class="bg-gray-800 rounded-lg p-4 mb-4 relative">
+    <div class="flex justify-between items-center">
+      <p class="text-white font-semibold">{{ c.usuario }}</p>
+      <p class="text-sm text-gray-400">{{ c.fecha | date:'short' }}</p>
+    </div>
+
+    <p class="text-gray-200 mt-2">{{ c.contenido }}</p>
+
+    <!-- Mostrar respuestas (que son solo de admins) debajo, con indentación -->
+    <div *ngIf="c.respuestas && c.respuestas.length > 0" class="mt-4 pl-6 border-l-4 border-green-600">
+      <div *ngFor="let r of c.respuestas" class="bg-gray-700 rounded p-3 mb-3">
+        <div class="flex justify-between items-center">
+          <p class="text-green-400 font-semibold">{{ r.usuario }} (Admin)</p>
+          <p class="text-sm text-gray-400">{{ r.fecha | date:'short' }}</p>
+        </div>
+        <p class="text-gray-200 mt-1">{{ r.contenido }}</p>
+      </div>
+    </div>
+
+    <!-- Likes y dislikes -->
+    <div class="mt-3 flex gap-4 text-lg">
+      <button
+        (click)="votar(c.id, true)"
+        class="flex items-center gap-1 transition-colors"
+        [ngClass]="{
+          'text-green-400': c.userVoto === true,
+          'text-gray-400 hover:text-green-300': c.userVoto !== true
+        }"
+      >
+        <span>👍</span>
+        <span>{{ c.likes }}</span>
+      </button>
+
+      <button
+        (click)="votar(c.id, false)"
+        class="flex items-center gap-1 transition-colors"
+        [ngClass]="{
+          'text-red-400': c.userVoto === false,
+          'text-gray-400 hover:text-red-300': c.userVoto !== false
+        }"
+      >
+        <span>👎</span>
+        <span>{{ c.dislikes }}</span>
+      </button>
+    </div>
+  </div>

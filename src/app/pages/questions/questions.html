@@ -1,0 +1,179 @@
+<h1 class="bg-black text-green-400 text-7xl  px-6 py-4 pb-12 my-12 text-center">
+    Preguntas comunes (FAQ)
+</h1>
+<div class="max-w-3xl mx-auto p-6 space-y-6">
+
+    <!-- Sección 1 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(0)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Cómo funciona el sistema?</h2>
+            <mat-icon>{{ seccionesVisibles[0] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[0]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            - Los sensores DHT11, HX711 o KY-038 están conectados al microcontrolador, un ESP32.
+            <br>
+            - Este lee los datos periódicamente, aplicando calibraciones para asegurar precisión y estabilidad.
+            <br>
+            - Después publica los datos en tiempo real a un broker MQTT, como Mosquitto, usando tópicos específicos por tipo de sensor o ubicación.
+            <br>
+            - Finalmente el teléfono móvil actúa como cliente recibiendo los tópicos que publica el ESP32 y mostrandolos en su respectiva pantalla.
+        </p>
+        }
+    </button>
+
+    <!-- Sección 2 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(1)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Qué tipo de sensores se pueden usar?</h2>
+            <mat-icon>{{ seccionesVisibles[1] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[1]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            Actualmente, el sistema está diseñado para trabajar con una selección específica de sensores compatibles con el microcontrolador ESP32, cada uno enfocado en un tipo de medición:
+            <br>
+            <br>
+            DHT11 – Temperatura y Humedad
+            <br>
+            - Sensor digital básico que mide temperatura y humedad relativa.
+            <br>
+            - Ideal para aplicaciones ambientales, monitoreo de interiores o sistemas de ventilación.
+            <br>
+            - Se comunica por protocolo digital de un solo hilo, lo que lo hace fácil de integrar.
+            <br>
+            <br>
+            HX711 – Celdas de carga (peso)
+            <br>
+            - Amplificador de señal para celdas de carga, utilizado para medir peso con alta precisión.
+            <br>
+            - Requiere calibración inicial, pero ofrece lecturas estables y confiables.
+            <br>
+            - Muy útil en balanzas, sistemas de dosificación o monitoreo de carga.
+            <br>
+            <br>
+            KY-038 – Sensor de sonido
+            <br>
+            - Detecta niveles de sonido ambiente mediante un micrófono electret.
+            <br>
+            - Puede usarse para activar alertas por ruido, detectar presencia o monitorear ambientes acústicos.
+            <br>
+            - Su salida analógica permite ajustar sensibilidad, aunque no distingue frecuencias específicas
+
+        </p>
+        }
+    </button>
+
+    <!-- Sección 3 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(2)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Cómo se visualizan los datos?</h2>
+            <mat-icon>{{ seccionesVisibles[2] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[2]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            Los datos recopilados por el sistema se presentan de forma clara y atractiva mediante gráficos dinámicos creados con la librería Chart.js. El usuario puede elegir entre diferentes tipos de visualización, como gráficos de barras para comparar valores específicos, o gráficos de pastel para entender proporciones de manera intuitiva. Además, la interfaz permite interactuar con la información, filtrar periodos de tiempo y exportar los resultados para generar reportes o respaldos.
+        </p>
+        }
+    </button>
+
+    <!-- Sección 4 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(3)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Se pueden agregar más sensores?</h2>
+            <mat-icon>{{ seccionesVisibles[3] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[3]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            Sí, la aplicación ha sido diseñada con escalabilidad en mente, lo que significa que puede adaptarse para recibir datos de más sensores en el futuro. Para lograrlo, bastará con realizar pequeñas modificaciones tanto en el código del ESP32 como en la configuración interna de la app, lo que permitirá integrar sensores adicionales de temperatura, humedad, luminosidad o cualquier otro tipo compatible. Esto ofrece flexibilidad para proyectos en crecimiento sin necesidad de cambiar todo el sistema.
+        </p>
+        }
+    </button>
+
+    <!-- Sección 5 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(4)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Funciona en todos los dispositivos móviles?</h2>
+            <mat-icon>{{ seccionesVisibles[4] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[4]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            Actualmente, la aplicación está optimizada exclusivamente para teléfonos y tabletas que utilicen el sistema operativo Android. Esto permite aprovechar mejor las funcionalidades nativas del sistema y garantizar un rendimiento óptimo. Sin embargo, se está evaluando el desarrollo de una versión compatible con iOS para el futuro, lo que ampliaría el acceso a usuarios con iPhone o iPad.
+        </p>
+        }
+    </button>
+
+    <!-- Sección 6 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(5)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Se puede usar el sistema sin conexión a internet?</h2>
+            <mat-icon>{{ seccionesVisibles[5] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[5]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            El sistema requiere estar conectado a una red Wi-Fi para enviar y recibir datos en tiempo real. El dispositivo que recopila la información debe estar en línea para transmitirla, y el teléfono o tableta que la visualiza debe estar conectado a la misma red o a internet para recibirla. Sin conexión, no será posible acceder a los datos actualizados, aunque podrían añadirse funciones offline en futuras versiones.
+        </p>
+        }
+    </button>
+
+    <!-- Sección 7 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(6)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Cada cuánto se recomienda revisar el sistema?</h2>
+            <mat-icon>{{ seccionesVisibles[6] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[6]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            Se recomienda realizar revisiones diarias o al menos varias veces por semana para garantizar que todo funcione correctamente. Un monitoreo frecuente permite detectar rápidamente fallas en los sensores, problemas de conexión o lecturas anómalas. Esto es especialmente importante en proyectos donde la precisión de los datos es fundamental para la toma de decisiones.
+        </p>
+        }
+    </button>
+
+    <!-- Sección 8 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(7)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Se pueden agregar alertas o notificaciones?</h2>
+            <mat-icon>{{ seccionesVisibles[7] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[7]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            Sí, el sistema incluye la posibilidad de configurar alertas personalizadas. El usuario puede definir umbrales específicos para cada tipo de dato (temperatura, humedad, presión, etc.), de manera que, si se superan esos valores, la app envíe una notificación instantánea. Esto es muy útil para reaccionar rápidamente ante situaciones críticas y evitar daños o pérdidas.
+        </p>
+        }
+    </button>
+
+    <!-- Sección 9 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(9)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Qué pasa si un sensor deja de enviar datos?</h2>
+            <mat-icon>{{ seccionesVisibles[9] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[9]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            Si un sensor deja de enviar datos, lo primero es verificar que la red Wi-Fi esté funcionando correctamente. Si la conexión es estable, el siguiente paso es asegurarse de que el ESP32 esté recibiendo alimentación de energía de forma continua. Finalmente, conviene revisar que el sensor esté bien conectado físicamente y que no presente daños visibles. En caso de persistir el problema, puede que sea necesario reemplazarlo o reconfigurarlo.
+        </p>
+        }
+    </button>
+
+    <!-- Sección 10 -->
+    <button class="w-full bg-black text-green-400 rounded-lg p-4 hover:bg-gray-900 text-left"
+        (click)="toggleSeccion(8)">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">¿Hay una comunidad o foro para resolver dudas?</h2>
+            <mat-icon>{{ seccionesVisibles[8] ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        @if (seccionesVisibles[8]) {
+        <p class="mt-2 text-white transition-all duration-300 ease-in-out">
+            Actualmente, no existe un foro público oficial, pero puedes ponerte en contacto directamente con el equipo de desarrollo para resolver dudas o solicitar soporte técnico. Dentro del sitio web hay una sección con los datos de contacto y, en un futuro cercano, se planea habilitar un espacio de comunidad donde los usuarios puedan intercambiar experiencias, sugerencias y soluciones.
+        </p>
+        }
+    </button>
+</div>

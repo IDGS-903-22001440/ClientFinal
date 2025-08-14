@@ -1,0 +1,226 @@
+<div class="flex min-h-screen bg-black text-green-400 font-sans">
+
+  <!-- MENÚ LATERAL -->
+  <aside *ngIf="productosComprados.length > 0" class="w-72 bg-green-900 p-6 shadow-lg">
+    <h3 class="text-xl font-extrabold mb-6 border-b border-green-700 pb-2">Productos desbloqueados</h3>
+    <ul>
+      <li
+        *ngFor="let prod of productosComprados"
+        (click)="seleccionarProducto(prod.nombre)"
+        class="cursor-pointer p-3 rounded-lg hover:bg-green-700 transition-colors duration-300"
+        [class.bg-green-700]="productoSeleccionado === prod.nombre"
+      >
+        {{ prod.nombre }}
+      </li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO CENTRAL -->
+  <main class="flex-1 p-10 overflow-y-auto max-h-screen">
+
+    <!-- Bloque cuando no hay productos comprados -->
+    <div *ngIf="productosComprados.length === 0" class="bg-green-900 p-10 rounded-lg shadow-lg text-center max-w-md mx-auto">
+      <h2 class="text-3xl font-bold mb-6">Contenido bloqueado</h2>
+      <p class="mb-6 text-lg">Debes comprar un producto para acceder al contenido de esta página.</p>
+      <button
+        class="bg-green-500 hover:bg-green-400 text-black font-semibold px-6 py-3 rounded-lg shadow-md transition"
+        (click)="irAlInicio()"
+      >
+        Ir al inicio
+      </button>
+    </div>
+
+    <!-- Contenido con documentación -->
+    <section *ngIf="productoSeleccionado" class="bg-green-900 p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+
+      <ng-container [ngSwitch]="productoSeleccionado">
+
+        <!-- Cables Macho-Hembra -->
+        <article *ngSwitchCase="'Cables Macho-Hembra'">
+          <h2 class="text-4xl font-extrabold mb-6 border-b-4 border-green-500 pb-3 flex items-center gap-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Dupont_wire_male-female.jpg" alt="Cables Macho-Hembra" class="w-16 rounded shadow-lg" />
+            Cables Macho-Hembra ⚡
+          </h2>
+          <p class="mb-6 leading-relaxed text-lg">
+            Los cables macho-hembra, también conocidos como cables Dupont o jumper wires, son esenciales para crear conexiones temporales en circuitos electrónicos.
+            Son ampliamente usados en prototipos con placas Arduino, Raspberry Pi y otros microcontroladores. 
+          </p>
+          <p class="mb-6 leading-relaxed">
+            El extremo macho tiene una clavija metálica que se inserta en conectores hembra, mientras que el extremo hembra tiene un receptáculo para recibir clavijas macho.
+            Esto permite conectar sensores, módulos y placas de manera sencilla y sin soldaduras.
+          </p>
+          <h3 class="text-2xl font-bold mb-3">Aplicaciones comunes:</h3>
+          <ul class="list-disc list-inside mb-6 space-y-2">
+            <li>Prototipado rápido en placas de pruebas (breadboards).</li>
+            <li>Interconexión entre módulos electrónicos.</li>
+            <li>Facilitan el desarrollo de proyectos educativos y experimentales.</li>
+          </ul>
+          <h3 class="text-2xl font-bold mb-3">Diagrama básico de conexión:</h3>
+          <div class="mb-6">
+            <svg class="w-full max-w-md h-48 mx-auto" viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#4ade80" stroke-width="3">
+              <rect x="20" y="40" width="120" height="60" fill="#064e3b"/>
+              <rect x="260" y="40" width="120" height="60" fill="#064e3b"/>
+              <line x1="140" y1="70" x2="260" y2="70" stroke-linecap="round" stroke-dasharray="10 5" />
+              <circle cx="140" cy="70" r="6" fill="#22c55e" />
+              <circle cx="260" cy="70" r="6" fill="#22c55e" />
+              <text x="25" y="100" fill="#4ade80" font-size="16" font-family="monospace">Placa Arduino</text>
+              <text x="265" y="100" fill="#4ade80" font-size="16" font-family="monospace">Sensor</text>
+            </svg>
+          </div>
+        </article>
+
+        <!-- Sensor DHT11 -->
+        <article *ngSwitchCase="'Sensor DHT11'">
+          <h2 class="text-4xl font-extrabold mb-6 border-b-4 border-green-500 pb-3 flex items-center gap-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/DHT11_DHT22_Sensors.jpg/320px-DHT11_DHT22_Sensors.jpg" alt="Sensor DHT11" class="w-16 rounded shadow-lg" />
+            Sensor DHT11 🌡️💧
+          </h2>
+          <p class="mb-6 leading-relaxed text-lg">
+            El DHT11 es un sensor digital económico que mide la temperatura y la humedad relativa del ambiente.
+            Su salida digital lo hace fácil de usar en microcontroladores para proyectos de automatización y monitoreo ambiental.
+          </p>
+          <p class="mb-6 leading-relaxed">
+            Este sensor tiene una precisión razonable para proyectos básicos, con un rango de temperatura de 0 a 50 °C y humedad del 20% al 90%.
+            Se comunica mediante un protocolo de un solo hilo que requiere temporización precisa para leer datos correctamente.
+          </p>
+          <h3 class="text-2xl font-bold mb-3">Usos frecuentes:</h3>
+          <ul class="list-disc list-inside mb-6 space-y-2">
+            <li>Estaciones meteorológicas caseras.</li>
+            <li>Control climático en invernaderos.</li>
+            <li>Sistemas de domótica para ambientes interiores.</li>
+          </ul>
+          <h3 class="text-2xl font-bold mb-3">Esquema de conexión:</h3>
+          <img src="https://components101.com/sites/default/files/component_pin/DHT11-pinout.png" alt="Pinout DHT11" class="mx-auto rounded shadow-lg max-w-sm" />
+          <p class="mt-4 text-green-300">
+            Conectar VCC a 5V, GND a tierra, y la salida digital al pin de lectura del microcontrolador. Es recomendable usar una resistencia pull-up de 10KΩ en la línea de datos.
+          </p>
+        </article>
+
+        <!-- Sensor de Ruido KY-038 -->
+        <article *ngSwitchCase="'Sensor de Ruido KY-038'">
+          <h2 class="text-4xl font-extrabold mb-6 border-b-4 border-green-500 pb-3 flex items-center gap-4">
+            <img src="https://cdn.sparkfun.com//assets/parts/1/1/5/4/7/15262-KY-038_1.jpg" alt="Sensor de Ruido KY-038" class="w-16 rounded shadow-lg" />
+            Sensor de Ruido KY-038 🎤
+          </h2>
+          <p class="mb-6 leading-relaxed text-lg">
+            El KY-038 es un sensor de sonido que detecta la intensidad del ruido ambiental y permite activar eventos basados en sonido.
+            Muy útil para proyectos de alarmas, robótica y sistemas interactivos.
+          </p>
+          <p class="mb-6 leading-relaxed">
+            Cuenta con un micrófono electret incorporado y un potenciómetro para ajustar la sensibilidad. La salida es analógica y digital para mayor flexibilidad.
+          </p>
+          <h3 class="text-2xl font-bold mb-3">Aplicaciones típicas:</h3>
+          <ul class="list-disc list-inside mb-6 space-y-2">
+            <li>Detección de niveles de ruido en ambientes.</li>
+            <li>Activación de dispositivos al detectar sonido.</li>
+            <li>Proyectos de automatización basados en sonido.</li>
+          </ul>
+          <h3 class="text-2xl font-bold mb-3">Diagrama simplificado:</h3>
+          <img src="https://arduinogetstarted.com/tutorials/wp-content/uploads/2019/10/KY-038_pinout.png" alt="KY-038 Pinout" class="mx-auto rounded shadow-lg max-w-sm" />
+          <p class="mt-4 text-green-300">
+            Alimentar con 5V, conectar salida analógica al ADC del microcontrolador y ajustar sensibilidad con potenciómetro.
+          </p>
+        </article>
+
+        <!-- Célula de Presión -->
+        <article *ngSwitchCase="'Célula de Presión'">
+          <h2 class="text-4xl font-extrabold mb-6 border-b-4 border-green-500 pb-3 flex items-center gap-4">
+            <img src="https://cdn.sparkfun.com//assets/parts/1/1/4/2/7/14427-FSR_402.png" alt="Célula de Presión" class="w-16 rounded shadow-lg" />
+            Célula de Presión ⚖️
+          </h2>
+          <p class="mb-6 leading-relaxed text-lg">
+            Este sensor es una resistencia variable que cambia su valor dependiendo de la presión aplicada sobre su superficie.
+            Es muy usado para medir fuerza o peso en proyectos de control y automatización.
+          </p>
+          <p class="mb-6 leading-relaxed">
+            Funciona detectando cambios en la resistencia eléctrica, que pueden ser medidos mediante un divisor resistivo conectado al ADC del microcontrolador.
+          </p>
+          <h3 class="text-2xl font-bold mb-3">Ejemplos de uso:</h3>
+          <ul class="list-disc list-inside mb-6 space-y-2">
+            <li>Básculas electrónicas.</li>
+            <li>Sistemas de detección de contacto o presión.</li>
+            <li>Robótica para detección táctil.</li>
+          </ul>
+          <h3 class="text-2xl font-bold mb-3">Ejemplo de circuito básico:</h3>
+          <img src="https://cdn.sparkfun.com//assets/learn_tutorials/4/4/0/FSR_circuit.png" alt="Circuito Célula de presión" class="mx-auto rounded shadow-lg max-w-sm" />
+          <p class="mt-4 text-green-300">
+            Conecta el sensor en un divisor resistivo con una resistencia fija y lee el voltaje variable con el ADC del microcontrolador para interpretar la fuerza aplicada.
+          </p>
+        </article>
+
+        <!-- ESP32 -->
+        <article *ngSwitchCase="'ESP32'">
+          <h2 class="text-4xl font-extrabold mb-6 border-b-4 border-green-500 pb-3 flex items-center gap-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/ESP32-WROOM-32_Module_Official_Image.jpg/320px-ESP32-WROOM-32_Module_Official_Image.jpg" alt="ESP32" class="w-16 rounded shadow-lg" />
+            ESP32 📶
+          </h2>
+          <p class="mb-6 leading-relaxed text-lg">
+            El ESP32 es un microcontrolador de bajo costo con conectividad WiFi y Bluetooth integrada, ideal para proyectos IoT y aplicaciones embebidas avanzadas.
+          </p>
+          <p class="mb-6 leading-relaxed">
+            Cuenta con múltiples núcleos, ADC, DAC, sensores táctiles y otras funcionalidades que permiten realizar proyectos complejos sin necesidad de módulos adicionales.
+          </p>
+          <h3 class="text-2xl font-bold mb-3">Características clave:</h3>
+          <ul class="list-disc list-inside mb-6 space-y-2">
+            <li>WiFi 802.11 b/g/n y Bluetooth 4.2 BLE.</li>
+            <li>Procesador dual-core a 240 MHz.</li>
+            <li>Múltiples GPIOs, ADCs y interfaces SPI, I2C, UART.</li>
+            <li>Compatible con Arduino IDE, ESP-IDF y MicroPython.</li>
+          </ul>
+          <h3 class="text-2xl font-bold mb-3">Diagrama de bloques:</h3>
+          <img src="https://randomnerdtutorials.com/wp-content/uploads/2018/11/esp32-pinout.png" alt="Pinout ESP32" class="mx-auto rounded shadow-lg max-w-3xl" />
+          <p class="mt-4 text-green-300">
+            El ESP32 puede ser alimentado con 3.3V y permite conexiones múltiples para sensores, actuadores y comunicación inalámbrica.
+          </p>
+        </article>
+
+        <!-- Resistencias -->
+        <article *ngSwitchCase="'Resistencias (Set de 100 piezas)'">
+          <h2 class="text-4xl font-extrabold mb-6 border-b-4 border-green-500 pb-3 flex items-center gap-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Resistors.JPG/320px-Resistors.JPG" alt="Resistencias" class="w-16 rounded shadow-lg" />
+            Resistencias (Set de 100 piezas) 🔥
+          </h2>
+          <p class="mb-6 leading-relaxed text-lg">
+            Las resistencias son componentes fundamentales en electrónica, usadas para limitar corriente, dividir voltaje y proteger circuitos.
+          </p>
+          <p class="mb-6 leading-relaxed">
+            Este set incluye resistencias con diferentes valores ohmicos ideales para prototipado y experimentación en todo tipo de proyectos.
+          </p>
+          <h3 class="text-2xl font-bold mb-3">Conceptos importantes:</h3>
+          <ul class="list-disc list-inside mb-6 space-y-2">
+            <li>Cómo leer el código de colores para identificar valores.</li>
+            <li>Uso en divisores de voltaje y limitadores de corriente.</li>
+            <li>Aplicación en circuitos analógicos y digitales.</li>
+          </ul>
+          <h3 class="text-2xl font-bold mb-3">Ley de Ohm básica:</h3>
+          <p class="mb-4">
+            La ley de Ohm establece que <span class="font-bold">V = I × R</span>, donde <em>V</em> es el voltaje, <em>I</em> la corriente y <em>R</em> la resistencia.
+            Esta fórmula es fundamental para diseñar circuitos con resistencias.
+          </p>
+          <div class="mb-6 flex justify-center">
+            <svg width="250" height="150" viewBox="0 0 250 150" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#4ade80" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+              <rect x="20" y="50" width="40" height="40" fill="#064e3b" />
+              <line x1="60" y1="70" x2="100" y2="70" />
+              <polyline points="100,70 110,60 120,80 130,60 140,80 150,60 160,80 170,60 180,70" />
+              <line x1="180" y1="70" x2="220" y2="70" />
+              <rect x="220" y="50" width="30" height="40" fill="#064e3b" />
+              <text x="25" y="100" fill="#4ade80" font-family="monospace" font-size="16">Fuente</text>
+              <text x="210" y="100" fill="#4ade80" font-family="monospace" font-size="16">Carga</text>
+              <text x="110" y="40" fill="#4ade80" font-family="monospace" font-size="14">Resistencia</text>
+            </svg>
+          </div>
+          <p class="text-green-300 text-center max-w-md mx-auto">
+            En este esquema, la corriente pasa por la resistencia limitando el flujo hacia la carga.
+          </p>
+        </article>
+
+        <!-- Default -->
+        <div *ngSwitchDefault>
+          <p>No hay documentación disponible para este producto.</p>
+        </div>
+
+      </ng-container>
+
+    </section>
+  </main>
+</div>

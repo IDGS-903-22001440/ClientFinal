@@ -1,10 +1,10 @@
 <div class="h-screen flex items-center justify-center">
-    <form class="shadow-md rounded-md p-5 bg-white w-3/12" [formGroup]="form" (ngSubmit)="login()">
-        <div class="py-4">
-            <h1 class="font-bold py-5">
+    <form class="shadow-md rounded-md p-5 bg-black w-3/12" [formGroup]="form" (ngSubmit)="login()">
+        <div class="py-4 ">
+            <h1 class="font-bold py-5 text-white">
                 Login
             </h1>
-            <h6 class="text-slate-600 text-base">
+            <h6 class="text-slate-600 text-base text-white">
                 Login to your account
             </h6>
         </div>
@@ -24,11 +24,11 @@
         </mat-form-field>
 
 
-        <a routerLink="/forget-password">Forgot Password?</a>
+        <a routerLink="/forget-password" class="text-green-400">Forgot Password?</a>
 
 
         <button type="submit" [disabled]="form.invalid"
-        class="w-full border mt-4 rounded-md border-slate-200 py-2 px-3 bg-purple-700 text-white font-bold hover:bg-purple-800 disabled:opacity-50">
+        class="w-full border mt-4 rounded-md border-slate-200 py-2 px-3 bg-green-600 text-white font-bold hover:bg-green-800 disabled:opacity-50">
             Login
         </button>
 
@@ -36,7 +36,7 @@
             <span class="text-slate-600">
                 Don´t have an account?
             </span>
-            <a  class="text-purple-700" [routerLink]="['/register']">Register</a>
+            <a  class="text-purple-700" [routerLink]="['/register']" class="text-green-400">Register</a>
         </div>
     </form>
 </div>

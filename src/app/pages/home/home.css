@@ -1,0 +1,27 @@
+/* Ajustes para la imagen "alta" — cambia valores si quieres menos/mas recorte */
+#img-alta {
+  position: absolute;
+  top: 0;
+  left: -15%;          /* desplaza a la izquierda para compensar el skew */
+  width: 130%;         /* agranda para cubrir el área después del skew */
+  height: 100%;        /* ocupa toda la altura del contenedor */
+  object-fit: cover;
+  transform: skewX(-12deg);      /* mismo skew que tenías */
+  transform-origin: left center; /* origen para que el skew "apunte" desde la izquierda */
+  clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Responsive: en pantallas pequeñas puedes ajustar offsets */
+@media (max-width: 640px) {
+  #img-alta {
+    left: -25%;
+    width: 150%;
+  }
+}
+
+@media (min-width: 768px) {
+  #img-alta {
+    left: -12%;
+    width: 125%;
+  }
+}

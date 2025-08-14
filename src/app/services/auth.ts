@@ -119,4 +119,12 @@ export class Auth {
 
     return userDetail.refreshToken
   };
+
+  // Editar usuario (solo FullName y Email)
+  editUser = (id: string, data: { fullName: string; email: string }): Observable<AuthResponse> =>
+    this.http.put<AuthResponse>(`${this.apiUrl}/Account/${id}`, data);
+
+  // Eliminar usuario
+  deleteUser = (id: string): Observable<AuthResponse> =>
+    this.http.delete<AuthResponse>(`${this.apiUrl}/Account/${id}`);
 }
