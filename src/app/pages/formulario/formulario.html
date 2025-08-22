@@ -1,52 +1,146 @@
-<form [formGroup]="saleForm" (ngSubmit)="submitForm()" 
-      class="max-w-2xl mx-auto p-6 bg-gray-900 text-green-400 shadow-lg rounded-lg space-y-6">
+<div class="max-w-7xl mx-auto p-8 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-10 font-sans">
 
-  <!-- Usuario -->
-  <div>
-    <label class="block font-semibold mb-2">Nombre Completo:</label>
-    <input formControlName="fullName" type="text" readonly
-           class="w-full border border-green-500 bg-gray-800 p-2 rounded text-green-300" />
+  <!-- Lado izquierdo: Información -->
+  <div class="bg-gray-900 p-10 rounded-2xl text-green-400 space-y-6 shadow-xl border border-green-700">
+    <h2 class="text-3xl font-bold mb-4 border-b border-green-600 pb-3">Información sobre la cotización</h2>
+    <p class="text-green-200 text-lg leading-relaxed">
+      Revisa los detalles de los módulos seleccionados, precios individuales y el costo total estimado. Además, obtendrás recomendaciones sobre la cantidad óptima de cada módulo y consejos prácticos para integrar todos los componentes correctamente en tu proyecto.
+    </p>
+
+    <h3 class="text-2xl font-semibold mt-6 border-b border-green-600 pb-2">Recomendaciones</h3>
+    <p class="text-green-200 text-lg leading-relaxed">
+      Antes de realizar la compra, verifica la compatibilidad de los módulos con tu hardware y objetivos del proyecto. Planea el espacio físico, alimentación eléctrica y seguridad al manipular los sensores. Esto garantizará un rendimiento óptimo y minimizará errores.
+    </p>
+    <p class="text-green-200 text-lg leading-relaxed">
+      Mantén los módulos actualizados y sigue las instrucciones de instalación cuidadosamente. Nuestro equipo de soporte está disponible para resolver cualquier duda.
+    </p>
+
+    <h3 class="text-2xl font-semibold mt-6 border-b border-green-600 pb-2">Lo que ofrecemos</h3>
+    <ul class="list-disc text-green-300 space-y-3 ml-10">
+      <li><span class="font-semibold">Productos de calidad y originales:</span> Componentes auténticos y duraderos.</li>
+      <li><span class="font-semibold">Soporte técnico integral:</span> Te acompañamos desde la compra hasta la implementación final.</li>
+      <li><span class="font-semibold">Recomendaciones personalizadas:</span> Sugerimos la combinación de módulos ideal según tus objetivos.</li>
+      <li><span class="font-semibold">Documentación y tutoriales:</span> Acceso a guías paso a paso, ejemplos prácticos y recursos de aprendizaje.</li>
+      <li><span class="font-semibold">Actualizaciones constantes:</span> Mantén tu hardware y software al día con las últimas versiones.</li>
+    </ul>
+
+    <p class="text-green-200 text-lg mt-4">
+      Para más detalles, visita nuestra sección de
+      <a routerLink="/questions" class="text-blue-400 underline hover:text-blue-500 transition">
+         ayuda
+      </a>, donde encontrarás guías completas, preguntas frecuentes y ejemplos prácticos de integración de los módulos.
+    </p>
   </div>
 
-  <div>
-    <label class="block font-semibold mb-2">Correo Electrónico:</label>
-    <input formControlName="email" type="email" readonly
-           class="w-full border border-green-500 bg-gray-800 p-2 rounded text-green-300" />
-  </div>
+  <!-- Lado derecho: Formulario -->
+  <form [formGroup]="saleForm" (ngSubmit)="submitForm()" 
+        class="bg-gray-800 p-10 rounded-2xl text-green-400 space-y-6 shadow-2xl border border-green-600">
 
-  <input formControlName="userId" type="hidden" />
+    <!-- Usuario -->
+    <div>
+      <label class="block font-semibold mb-2 text-white text-lg">Nombre Completo:</label>
+      <input formControlName="fullName" type="text" readonly
+             class="w-full border border-green-500 bg-gray-700 p-4 rounded text-white text-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+    </div>
 
-  <!-- Dirección -->
-  <div>
-    <label class="block font-semibold mb-2">Dirección de envío:</label>
-    <input formControlName="direccion" type="text" placeholder="Ej: Calle 123, Ciudad, País"
-           class="w-full border border-green-500 bg-gray-800 p-2 rounded text-green-300" />
-  </div>
+    <div>
+      <label class="block font-semibold mb-2 text-white text-lg">Correo Electrónico:</label>
+      <input formControlName="email" type="email" readonly
+             class="w-full border border-green-500 bg-gray-700 p-4 rounded text-white text-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+    </div>
 
-  <!-- Módulos -->
-  <div>
-    <label class="block font-semibold mb-2">Selecciona los módulos a comprar:</label>
-    <div *ngFor="let module of sensorModules" class="mb-4 p-3 bg-gray-800 rounded-lg">
-      <label class="flex items-center space-x-2">
-        <input type="checkbox" [checked]="module.selected" 
-               (change)="onModuleCheckboxChange(module, $event)" />
-        <span>{{ module.name }}</span>
-      </label>
+    <input formControlName="userId" type="hidden" />
 
-      <div *ngIf="module.selected && module.formGroup" [formGroup]="module.formGroup" class="ml-6 mt-2">
-        <label class="block">Cantidad para {{ module.product.nombre }}:</label>
-        <input type="number" formControlName="quantity" min="1" 
-               class="border border-green-500 bg-gray-700 p-1 rounded w-24 text-green-300" />
-        <span class="text-green-500 ml-2">Precio: {{ module.product.precio | currency }}</span>
+    <!-- Dirección -->
+    <div>
+      <label class="block font-semibold mb-2 text-white text-lg">Dirección de envío:</label>
+      <input formControlName="direccion" type="text" placeholder="Ej: Calle 123, Ciudad, País"
+             class="w-full border border-green-500 bg-gray-700 p-4 rounded text-white placeholder-green-300 text-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+    </div>
+
+    <!-- Módulos -->
+    <div>
+      <label class="block font-semibold mb-2 text-white text-lg">Selecciona los módulos a comprar:</label>
+      <div *ngFor="let module of sensorModules" class="mb-4 p-5 bg-gray-700 rounded-xl border border-green-600 hover:bg-gray-600 transition">
+        <label class="flex items-center space-x-3 cursor-pointer">
+          <input type="checkbox" [checked]="module.selected" 
+                 (change)="onModuleCheckboxChange(module, $event)"
+                 class="accent-green-500 w-6 h-6" />
+          <span class="text-white font-medium text-lg">{{ module.name }}</span>
+        </label>
+
+        <div *ngIf="module.selected && module.formGroup" [formGroup]="module.formGroup" class="ml-8 mt-4">
+          <label class="block text-white mb-2 text-lg">Cantidad para {{ module.product.nombre }}:</label>
+          <input type="number" formControlName="quantity" min="1" 
+                 class="border border-green-500 bg-gray-600 p-3 rounded w-28 text-white text-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+          <span class="text-green-400 ml-4 font-semibold text-lg">Precio: {{ module.product.precio | currency }}</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Botón -->
-  <div class="text-center">
-    <button type="submit" 
-            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
-      Crear Cotización
-    </button>
+    <!-- Botón -->
+    <div class="text-center mt-6">
+      <button type="button" (click)="calculateCotizacion()"
+              class="bg-green-600 text-white px-10 py-4 rounded-2xl hover:bg-green-700 font-semibold text-lg transition duration-200 shadow-md">
+        Ver Cotización
+      </button>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
+  <div class="bg-gray-900 text-green-400 p-6 rounded-xl w-full max-w-lg shadow-2xl space-y-6">
+
+    <h2 class="text-2xl font-bold mb-4 border-b border-green-600 pb-2">Cotización Previa</h2>
+
+    <!-- Lista de productos -->
+    <div class="space-y-2">
+      <div *ngFor="let item of cotizacionPreview.detalles" class="flex justify-between p-2 bg-gray-800 rounded-lg border border-green-700">
+        <span class="font-medium">{{ item.nombre }} x{{ item.cantidad }}</span>
+        <span class="font-semibold">{{ (item.precio * item.cantidad) | currency }}</span>
+      </div>
+    </div>
+
+    <!-- Totales -->
+    <div class="border-t border-green-600 pt-4 space-y-1">
+      <div class="flex justify-between">
+        <span>Subtotal:</span>
+        <span>{{ cotizacionPreview.subtotal | currency }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Coste de la aplicacion:</span>
+        <span>{{ cotizacionPreview.extraSensores | currency }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Envio e instalación:</span>
+        <span>{{ cotizacionPreview.extraPorcentaje | currency }}</span>
+      </div>
+      <div class="flex justify-between font-bold text-green-300">
+        <span>Total Final:</span>
+        <span>{{ cotizacionPreview.totalFinal | currency }}</span>
+      </div>
+    </div>
+
+    <!-- Texto formal de información -->
+    <p class="text-green-200 text-sm mt-4">
+      Esta cotización refleja el costo estimado de los productos seleccionados, incluyendo ajustes por cantidad de sensores y recargos aplicables. 
+      Los precios están sujetos a disponibilidad y cambios sin previo aviso. 
+      Para más información sobre la cotización y políticas de pago, visite nuestra 
+      <a routerLink="/ayuda" class="text-blue-400 underline hover:text-blue-500 transition">
+        sección de ayuda
+      </a>.
+    </p>
+
+    <!-- Botones -->
+    <div class="flex justify-between mt-4">
+      <button (click)="submitForm(); showModal = false"
+              class="bg-green-600 px-5 py-2 rounded-xl hover:bg-green-700 font-semibold transition">
+        Confirmar Cotización
+      </button>
+      <button (click)="showModal = false"
+              class="bg-red-600 px-5 py-2 rounded-xl hover:bg-red-700 font-semibold transition">
+        Cancelar
+      </button>
+    </div>
   </div>
-</form>
+</div>

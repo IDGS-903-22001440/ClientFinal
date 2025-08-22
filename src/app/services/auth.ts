@@ -10,6 +10,7 @@ import { UserDetail } from '../interfaces/user-detail';
 import { Role } from './role';
 import { ResetPasswordRequest } from '../interfaces/reset-password-request';
 import { ChangePasswordRequest } from '../interfaces/change-password-request';
+import { EditUserRequest } from '../interfaces/edit-user-request';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +74,22 @@ export class Auth {
     return !this.isTokenExpired();
   }
 
+  isInRole = (role: string): boolean => {
+  const roles = this.getRoles();
+
+  if (!roles) return false;
+
+  if (typeof roles === 'string') {
+    return (roles as string).toLowerCase() === role.toLowerCase();
+  }
+
+  if (Array.isArray(roles)) {
+    return (roles as string[]).some(r => r.toLowerCase() === role.toLowerCase());
+  }
+
+  return false;
+};
+
 
   private isTokenExpired() {
     const token = this.getToken();
@@ -121,8 +138,8 @@ export class Auth {
   };
 
   // Editar usuario (solo FullName y Email)
-  editUser = (id: string, data: { fullName: string; email: string }): Observable<AuthResponse> =>
-    this.http.put<AuthResponse>(`${this.apiUrl}/Account/${id}`, data);
+  editUser = (id: string, data: EditUserRequest): Observable<AuthResponse> =>
+  this.http.put<AuthResponse>(`${this.apiUrl}/Account/${id}`, data);
 
   // Eliminar usuario
   deleteUser = (id: string): Observable<AuthResponse> =>

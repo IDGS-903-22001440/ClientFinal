@@ -22,6 +22,7 @@ import { Questions } from './pages/questions/questions';
 import { Documentation } from './pages/documentation/documentation';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Formulario } from './pages/formulario/formulario';
+import { Cotizaciones } from './pages/cotizaciones/cotizaciones';
 
 export const routes: Routes = [
     {
@@ -65,6 +66,11 @@ export const routes: Routes = [
     {
         path:'documentation',
         component: Documentation,
+        canActivate:[authGuard]
+    },
+    {
+        path:'cotizaciones',
+        component: Cotizaciones,
         canActivate:[authGuard]
     },
     {

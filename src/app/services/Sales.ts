@@ -17,7 +17,7 @@ export interface SaleDto {
   detalleVenta: SaleDetail[];
 }
 
-export type SaleStatus = 'EnProceso' | 'Aceptada';
+export type SaleStatus = 0 | 1 | 2 | 3 | 4;
 
 export interface Sale {
   id: number;
@@ -26,7 +26,18 @@ export interface Sale {
   total: number;
   saleDetails: SaleDetail[];
   direccion: string;
+  status: SaleStatus;
   user?: UserDetail;// otros campos según modelo
+}
+
+export interface CreateCotizacionDto {
+  userId: string;
+  direccion: string;
+  detalleVenta: {
+    productId: number;
+    quantity: number;
+    unitPrice: number;
+  }[];
 }
 
 @Injectable({
@@ -34,6 +45,7 @@ export interface Sale {
 })
 export class SalesService {
   private apiUrl = 'https://localhost:5000/api/Sales';
+  private quotationsUrl = 'https://localhost:5000/api/Quotations';
 
   constructor(private http: HttpClient) {}
 
@@ -62,7 +74,30 @@ export class SalesService {
   }
 
   // ✅ Ajustado para enviar direccion
-  createCotizacion(data: { userId: string; direccion: string; saleDetails: SaleDetail[] }) {
+  createCotizacion(data: CreateCotizacionDto) {
     return this.http.post(`${this.apiUrl}/CreateCotizacion`, data);
+  }
+
+  // Nuevo: Admin acepta la cotización
+  acceptQuotation(id: number): Observable<any> {
+    return this.http.put(`${this.quotationsUrl}/${id}/accept`, null);
+  }
+
+  // Nuevo: Usuario paga la cotización aceptada
+  payQuotation(id: number): Observable<any> {
+    return this.http.put(`${this.quotationsUrl}/${id}/pay`, null);
+  }
+
+  // --- Cotizaciones ---
+  getAllQuotations(): Observable<Sale[]> {
+    return this.http.get<Sale[]>(this.quotationsUrl);
+  }
+
+  getMyQuotations(): Observable<Sale[]> {
+    return this.http.get<Sale[]>(`${this.quotationsUrl}/user`);
+  }
+
+  getQuotationById(id: number): Observable<Sale> {
+    return this.http.get<Sale>(`${this.quotationsUrl}/${id}`);
   }
 }
